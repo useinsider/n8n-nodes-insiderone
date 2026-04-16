@@ -40,7 +40,6 @@
 	},
 	"devDependencies": {
 		"@n8n/node-cli": "*",
-		"n8n": "2.16.1",
 		"concurrently": "^9.2.1",
 		"eslint": "9.39.4",
 		"nodemon": "^3.1.14",
