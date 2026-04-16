@@ -6,5 +6,5 @@ COPY . .
 RUN npm run build
 
 FROM n8nio/n8n:2.16.1
-COPY --from=builder /app/dist /home/node/.n8n/custom/node_modules/n8n-nodes-insiderone/dist
-COPY --from=builder /app/package.json /home/node/.n8n/custom/node_modules/n8n-nodes-insiderone/package.json
+COPY --from=builder /app/dist /home/node/custom-nodes/node_modules/n8n-nodes-insiderone/dist
+COPY --from=builder /app/package.json /home/node/custom-nodes/node_modules/n8n-nodes-insiderone/package.json
