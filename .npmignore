@@ -1,0 +1,23 @@
+# Source files (only dist/ is published via "files" in package.json)
+nodes/
+credentials/
+**/*.ts
+!**/*.d.ts
+
+# Config & dev files
+.claude/
+CLAUDE.md
+.prettierrc.js
+eslint.config.mjs
+tsconfig.json
+eslint.config.mjs
+
+# Git & CI
+.gitignore
+.npmignore
+package-lock.json
+
+# Build artifacts
+*.js.map
+.tsbuildinfo
+node_modules/

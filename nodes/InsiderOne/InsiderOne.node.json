@@ -1,0 +1,13 @@
+{
+	"node": "n8n-nodes-insiderone.insiderOne",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Marketing & Growth"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://academy.insiderone.com/docs/insider-one-apis"
+			}
+		]
+	}
+}

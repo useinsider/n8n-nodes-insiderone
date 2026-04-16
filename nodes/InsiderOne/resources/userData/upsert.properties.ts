@@ -1,0 +1,200 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+export const upsertProperties: INodeProperties[] = [
+	{
+		displayName: 'Identifier Type',
+		name: 'identifierType',
+		type: 'options',
+		default: 'insiderId',
+		options: [
+			{
+				name: 'Insider ID',
+				value: 'insiderId',
+				description: 'Identify user by Insider ID',
+			},
+			{
+				name: 'Identifiers',
+				value: 'identifiers',
+				description: 'Identify user by email, UUID, phone number, or custom identifiers',
+			},
+		],
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'] },
+		},
+	},
+	{
+		displayName: 'Insider ID',
+		name: 'insiderId',
+		type: 'string',
+		default: '',
+		required: true,
+		description: 'The unique Insider ID for the user (e.g., sampleinsiderid)',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], identifierType: ['insiderId'] },
+		},
+	},
+	{
+		displayName: 'Identifiers',
+		name: 'identifiersUi',
+		type: 'collection',
+		placeholder: 'Add Identifier',
+		default: {},
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], identifierType: ['identifiers'] },
+		},
+		options: [
+			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'sample@useinsider.com', description: 'User email address' },
+			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
+			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
+			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
+		],
+	},
+	{
+		displayName: 'JSON Parameters',
+		name: 'jsonParameters',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to pass attributes and events as raw JSON strings',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'] },
+		},
+	},
+
+	// --- UI Mode ---
+	{
+		displayName: 'Attributes',
+		name: 'attributesUi',
+		type: 'collection',
+		placeholder: 'Add Attribute',
+		default: {},
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [false] },
+		},
+		options: [
+			{ displayName: 'Age', name: 'age', type: 'number', default: 0, description: 'Age of the user' },
+			{ displayName: 'Birthday', name: 'birthday', type: 'dateTime', default: '', description: 'User birthday in RFC 3339 format (e.g. 1993-03-12T00:00:00Z)' },
+			{ displayName: 'City', name: 'city', type: 'string', default: '', description: 'City information of the user' },
+			{ displayName: 'Country', name: 'country', type: 'string', default: '', description: 'Country in ISO 3166-1 alpha-2 format (e.g. US, TR)' },
+			{ displayName: 'Custom Attributes (JSON)', name: 'custom', type: 'json', default: '{}', description: 'Custom attributes as JSON object' },
+			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address, can be used as an identifier' },
+			{ displayName: 'Email Opt-In', name: 'email_optin', type: 'boolean', default: false, description: 'Whether the user has opted in for marketing emails' },
+			{ displayName: 'GDPR Opt-In', name: 'gdpr_optin', type: 'boolean', default: false, description: 'Whether the user has given GDPR consent for campaigns and data processing' },
+			{ displayName: 'Gender', name: 'gender', type: 'string', default: '', description: 'Gender of the user' },
+			{ displayName: 'Language', name: 'language', type: 'string', default: '', description: 'Language information of the user' },
+			{ displayName: 'Locale', name: 'lo', type: 'string', default: '', description: 'User locale information' },
+			{ displayName: 'Name', name: 'name', type: 'string', default: '', description: 'User first name' },
+			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format, can be used as an identifier' },
+			{ displayName: 'SMS Opt-In', name: 'sms_optin', type: 'boolean', default: false, description: 'Whether the user has opted in for SMS messages' },
+			{ displayName: 'Static Segment IDs', name: 'static_segment_id', type: 'string', default: '', description: 'Comma-separated newsletter contact list IDs (e.g. 1,2)' },
+			{ displayName: 'Surname', name: 'surname', type: 'string', default: '', description: 'User surname' },
+			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID, can be used as an identifier' },
+			{ displayName: 'WhatsApp Opt-In', name: 'whatsapp_optin', type: 'boolean', default: false, description: 'Whether the user has opted in for WhatsApp messages' },
+		],
+	},
+	{
+		displayName: 'Events',
+		name: 'eventsUi',
+		type: 'fixedCollection',
+		default: {},
+		placeholder: 'Add Event',
+		typeOptions: { multipleValues: true },
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [false] },
+		},
+		options: [
+			{
+				name: 'eventValues',
+				displayName: 'Event',
+				values: [
+					{
+						displayName: 'Event Name',
+						name: 'event_name',
+						type: 'string',
+						default: '',
+						required: true,
+					},
+					{
+						displayName: 'Timestamp',
+						name: 'timestamp',
+						type: 'dateTime',
+						default: '',
+						required: true,
+					},
+					{
+						displayName: 'Event Params (JSON)',
+						name: 'event_params',
+						type: 'json',
+						default: '{}',
+					},
+				],
+			},
+		],
+	},
+
+	// --- JSON Mode ---
+	{
+		displayName: 'Attributes (JSON)',
+		name: 'attributesJson',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [true] },
+		},
+	},
+	{
+		displayName: 'Events Array (JSON)',
+		name: 'eventsJson',
+		type: 'json',
+		default: '[]',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [true] },
+		},
+	},
+
+	// --- Additional Settings ---
+	{
+		displayName: 'Additional Settings',
+		name: 'additionalSettings',
+		type: 'collection',
+		placeholder: 'Add Setting',
+		default: {},
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'] },
+		},
+		options: [
+			{
+				displayName: 'Batch Size',
+				name: 'batchSize',
+				type: 'number',
+				default: 1,
+				typeOptions: { minValue: 1 },
+				description:
+					'Number of users to send in a single API request. Set higher to reduce API calls when processing many users.',
+			},
+			{
+				displayName: 'Error Callback Endpoint',
+				name: 'errorCallbackEndpoint',
+				type: 'string',
+				default: '',
+				placeholder: 'https://your-domain.com/webhook',
+				description: 'URL to receive errors if the asynchronous upsert fails',
+			},
+			{
+				displayName: 'Not Append',
+				name: 'notAppend',
+				type: 'boolean',
+				default: true,
+				description:
+					'Whether to overwrite existing attributes/arrays instead of appending',
+			},
+			{
+				displayName: 'Skip Hook',
+				name: 'skipHook',
+				type: 'boolean',
+				default: false,
+				description:
+					'Whether historical data should skip triggering journeys or data streams',
+			},
+		],
+	},
+];
