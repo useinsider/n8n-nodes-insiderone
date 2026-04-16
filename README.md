@@ -6,13 +6,13 @@ An [n8n](https://n8n.io/) community node package that integrates with [Insider O
 
 ## Installation
 
-In your n8n instance, go to **Settings → Community Nodes** and install:
+If you already have an n8n instance, go to **Settings → Community Nodes**, click **Install**, and enter:
 
 ```
 n8n-nodes-insiderone
 ```
 
-Or install via npm in a self-hosted environment:
+For self-hosted n8n via npm:
 
 ```bash
 npm install n8n-nodes-insiderone
@@ -20,25 +20,21 @@ npm install n8n-nodes-insiderone
 
 ---
 
-## Development
+## Running with Docker
 
 ```bash
-# Install dependencies
-npm install
+# First run — build and start
+docker compose up --build
 
-# Build
-npm run build
+# Subsequent runs
+docker compose up
 
-# Build and start n8n locally with this node loaded
-npm run start
-
-# Watch mode (TypeScript only)
-npm run build:watch
-
-# Lint
-npm run lint
-npm run lint:fix
+# After a code update
+git pull
+docker compose up --build
 ```
+
+n8n will be accessible at `http://localhost:5678`.
 
 ---
 
