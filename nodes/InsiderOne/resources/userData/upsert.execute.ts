@@ -43,10 +43,12 @@ export function buildUserObject(
 		const attributesUi = context.getNodeParameter('attributesUi', i, {}) as IDataObject;
 		attributes = { ...attributesUi };
 
-		if (attributes.custom) {
-			const custom = parseJsonParameter(attributes.custom as string, 'Custom Attributes');
-			delete attributes.custom;
-			Object.assign(attributes, custom);
+		// Build custom attributes from assignmentCollection
+		const customAttributesRaw = context.getNodeParameter('customAttributes', i, { assignments: [] }) as { assignments: Array<{ name: string; value: unknown }> };
+		for (const assignment of customAttributesRaw.assignments) {
+			if (assignment.name) {
+				attributes[assignment.name] = assignment.value as string;
+			}
 		}
 
 		if (attributes.static_segment_id) {
@@ -64,12 +66,30 @@ export function buildUserObject(
 		const eventsUi = context.getNodeParameter('eventsUi', i, {}) as IDataObject;
 		if (eventsUi.eventValues) {
 			events = (eventsUi.eventValues as IDataObject[]).map((ev) => {
+				const ts = ev.timestamp as string;
 				const event: IDataObject = {
 					event_name: ev.event_name,
-					timestamp: ev.timestamp,
+					timestamp: ts && !ts.endsWith('Z') ? `${ts}Z` : ts,
 				};
 				if (ev.event_params) {
-					event.event_params = parseJsonParameter(ev.event_params as string, 'Event Params');
+					const paramsRaw = ev.event_params as { assignments?: Array<{ name: string; value: unknown }> };
+					if (paramsRaw.assignments?.length) {
+						const eventParams: IDataObject = {};
+						for (const assignment of paramsRaw.assignments) {
+							if (assignment.name) eventParams[assignment.name] = assignment.value as string;
+						}
+						event.event_params = eventParams;
+					}
+				}
+				if (ev.custom) {
+					const customRaw = ev.custom as { assignments?: Array<{ name: string; value: unknown }> };
+					if (customRaw.assignments?.length) {
+						const customParams: IDataObject = {};
+						for (const assignment of customRaw.assignments) {
+							if (assignment.name) customParams[assignment.name] = assignment.value as string;
+						}
+						event.custom = customParams;
+					}
 				}
 				return event;
 			});

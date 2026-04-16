@@ -75,7 +75,6 @@ export const upsertProperties: INodeProperties[] = [
 			{ displayName: 'Birthday', name: 'birthday', type: 'dateTime', default: '', description: 'User birthday in RFC 3339 format (e.g. 1993-03-12T00:00:00Z)' },
 			{ displayName: 'City', name: 'city', type: 'string', default: '', description: 'City information of the user' },
 			{ displayName: 'Country', name: 'country', type: 'string', default: '', description: 'Country in ISO 3166-1 alpha-2 format (e.g. US, TR)' },
-			{ displayName: 'Custom Attributes (JSON)', name: 'custom', type: 'json', default: '{}', description: 'Custom attributes as JSON object' },
 			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address, can be used as an identifier' },
 			{ displayName: 'Email Opt-In', name: 'email_optin', type: 'boolean', default: false, description: 'Whether the user has opted in for marketing emails' },
 			{ displayName: 'GDPR Opt-In', name: 'gdpr_optin', type: 'boolean', default: false, description: 'Whether the user has given GDPR consent for campaigns and data processing' },
@@ -92,6 +91,34 @@ export const upsertProperties: INodeProperties[] = [
 		],
 	},
 	{
+		displayName: 'Add Custom Attributes',
+		name: 'showCustomAttributes',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to add custom attributes (c_ prefixed keys)',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [false] },
+		},
+	},
+	{
+		displayName: 'Custom attribute names must start with <code>c_</code> prefix (e.g. <code>c_loyalty_tier</code>)',
+		name: 'customAttributesNotice',
+		type: 'notice',
+		default: '',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [false], showCustomAttributes: [true] },
+		},
+	},
+	{
+		displayName: 'Custom Attributes',
+		name: 'customAttributes',
+		type: 'assignmentCollection',
+		default: {},
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['upsert'], jsonParameters: [false], showCustomAttributes: [true] },
+		},
+	},
+	{
 		displayName: 'Events',
 		name: 'eventsUi',
 		type: 'fixedCollection',
@@ -105,26 +132,42 @@ export const upsertProperties: INodeProperties[] = [
 			{
 				name: 'eventValues',
 				displayName: 'Event',
+				// eslint-disable-next-line n8n-nodes-base/node-param-fixed-collection-type-unsorted-items
 				values: [
 					{
 						displayName: 'Event Name',
 						name: 'event_name',
 						type: 'string',
 						default: '',
-						required: true,
+							required:	true,
 					},
 					{
 						displayName: 'Timestamp',
 						name: 'timestamp',
 						type: 'dateTime',
 						default: '',
-						required: true,
+							required:	true,
+						description: 'Event timestamp in RFC 3339 format (e.g. 2024-01-15T10:30:00Z). A \'Z\' suffix will be appended automatically if omitted.',
 					},
 					{
-						displayName: 'Event Params (JSON)',
+						displayName: 'Event Params',
 						name: 'event_params',
-						type: 'json',
-						default: '{}',
+						type: 'assignmentCollection',
+						default: {},
+						description: 'Standard event parameters (e.g. product_id, unit_price, currency)',
+					},
+					{
+						displayName: 'Custom event parameters do not require a <code>c_</code>	prefix',
+						name: 'customEventParamsNotice',
+						type: 'notice',
+						default: '',
+					},
+					{
+						displayName: 'Custom Event Params',
+						name: 'custom',
+						type: 'assignmentCollection',
+						default: {},
+						description: 'Custom event parameters sent under the \'custom\' key (e.g. customer_type, trial_start_date)',
 					},
 				],
 			},
