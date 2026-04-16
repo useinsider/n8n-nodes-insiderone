@@ -4,3 +4,4 @@ dist/
 .tsbuildinfo
 .claude/
 package-lock.json
+n8n_data/
