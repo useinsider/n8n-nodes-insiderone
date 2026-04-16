@@ -14,6 +14,8 @@ import {
 	executeGetProfile,
 	executeExport,
 	executeDeleteAttribute,
+	executeUpdateIdentifiers,
+	executeDeleteIdentifiers,
 } from './resources/userData';
 import {
 	dataGovernanceProperties,
@@ -29,6 +31,8 @@ const operationRouter: Record<string, OperationHandler> = {
 	upsert: executeUpsert,
 	deleteAttribute: executeDeleteAttribute,
 	getProfile: executeGetProfile,
+	updateIdentifiers: executeUpdateIdentifiers,
+	deleteIdentifiers: executeDeleteIdentifiers,
 	export: executeExport,
 	unsubscribeEmail: executeUnsubscribeEmail,
 };

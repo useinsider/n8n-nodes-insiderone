@@ -3,11 +3,15 @@ import { upsertProperties } from './upsert.properties';
 import { getProfileProperties } from './getProfile.properties';
 import { exportProperties } from './export.properties';
 import { deleteAttributeProperties } from './deleteAttribute.properties';
+import { updateIdentifiersProperties } from './updateIdentifiers.properties';
+import { deleteIdentifiersProperties } from './deleteIdentifiers.properties';
 
 export { executeUpsert, executeUpsertBatch } from './upsert.execute';
 export { executeGetProfile } from './getProfile.execute';
 export { executeExport } from './export.execute';
 export { executeDeleteAttribute } from './deleteAttribute.execute';
+export { executeUpdateIdentifiers } from './updateIdentifiers.execute';
+export { executeDeleteIdentifiers } from './deleteIdentifiers.execute';
 
 export const userDataOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -24,6 +28,12 @@ export const userDataOperations: INodeProperties = {
 			description:
 				'Create a new record, or update the current one if it already exists (upsert)',
 			action: 'Upsert user data',
+		},
+		{
+			name: 'Delete Identifiers',
+			value: 'deleteIdentifiers',
+			description: 'Delete one or more identifiers from a user profile',
+			action: 'Delete identifiers',
 		},
 		{
 			name: 'Delete User Attribute',
@@ -43,6 +53,12 @@ export const userDataOperations: INodeProperties = {
 			description: 'Query user profile information',
 			action: 'Get user profiles',
 		},
+		{
+			name: 'Update Identifiers',
+			value: 'updateIdentifiers',
+			description: 'Update an existing identifier to a new value',
+			action: 'Update identifiers',
+		},
 	],
 	default: 'upsert',
 };
@@ -53,4 +69,6 @@ export const userDataProperties: INodeProperties[] = [
 	...deleteAttributeProperties,
 	...getProfileProperties,
 	...exportProperties,
+	...updateIdentifiersProperties,
+	...deleteIdentifiersProperties,
 ];
