@@ -29,14 +29,7 @@ export async function executeExport(
 		if (getAllAttributes) {
 			exportAttributes = ['*'];
 		} else {
-			const attrsSection = this.getNodeParameter('exportAttributesSection', i, {}) as IDataObject;
-			const selectedAttrs = (attrsSection.selected ?? []) as string[];
-			exportAttributes = [...selectedAttrs];
-
-			if (attrsSection.custom) {
-				const customAttrs = (attrsSection.custom as string).split(',').map((s) => s.trim()).filter(Boolean);
-				exportAttributes.push(...customAttrs);
-			}
+			exportAttributes = this.getNodeParameter('exportAttributes', i, []) as string[];
 		}
 
 		// Events
@@ -44,10 +37,10 @@ export async function executeExport(
 		const events: IDataObject = {};
 
 		if (eventsSection.startDate) {
-			events.start_date = Math.floor(new Date(eventsSection.startDate as string).getTime() / 1000);
+			events.start_date = parseInt(eventsSection.startDate as string, 10);
 		}
 		if (eventsSection.endDate) {
-			events.end_date = Math.floor(new Date(eventsSection.endDate as string).getTime() / 1000);
+			events.end_date = parseInt(eventsSection.endDate as string, 10);
 		}
 		if (eventsSection.wantedJson) {
 			events.wanted = parseJsonParameter(eventsSection.wantedJson as string, 'Wanted Events (JSON)');

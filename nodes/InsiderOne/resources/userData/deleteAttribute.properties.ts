@@ -136,7 +136,7 @@ export const deleteAttributeProperties: INodeProperties[] = [
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		description: 'Custom attribute deletions (c_ prefixed attributes)',
+		description: 'Custom attribute deletions. Do not include the c_ prefix in attribute names.',
 		displayOptions: {
 			show: { resource: ['userData'], operation: ['deleteAttribute'], deleteAttributeJsonParameters: [false] },
 		},
@@ -155,19 +155,21 @@ export const deleteAttributeProperties: INodeProperties[] = [
 						displayName: 'Partial Delete',
 						values: [
 							{
+								// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
 								displayName: 'Attribute Name',
 								name: 'name',
-								type: 'string',
+								type: 'options',
+								typeOptions: { loadOptionsMethod: 'getCustomArrayAttributes' },
 								default: '',
-								placeholder: 'c_tags',
-								description: 'Custom attribute name (with c_ prefix)',
+								// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-dynamic-options
+								description: 'Array-type custom attribute to partially delete from',
 							},
 							{
 								displayName: 'Values',
 								name: 'values',
 								type: 'string',
 								default: '',
-								placeholder: 'value1, value2',
+								placeholder: 'value1, value2, value3',
 								description: 'Comma-separated values to remove',
 							},
 						],
@@ -175,14 +177,25 @@ export const deleteAttributeProperties: INodeProperties[] = [
 				],
 			},
 			{
+				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-multi-options
 				displayName: 'Whole',
 				name: 'whole',
-				type: 'string',
-				default: '',
-				placeholder: 'c_loyalty_tier, c_member_code',
-				description: 'Comma-separated custom attribute names to remove completely (with c_ prefix)',
+				type: 'multiOptions',
+				typeOptions: { loadOptionsMethod: 'getCustomAttributes' },
+				default: [],
+				// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-dynamic-multi-options
+				description: 'Custom attributes to remove completely',
 			},
 		],
+	},
+	{
+		displayName: 'Do not include the <code>c_</code> prefix in custom attribute names. The API expects the raw attribute name (e.g. <code>loyalty_tier</code>, not <code>c_loyalty_tier</code>).',
+		name: 'deleteAttributeCustomNotice',
+		type: 'notice',
+		default: '',
+		displayOptions: {
+			show: { resource: ['userData'], operation: ['deleteAttribute'], deleteAttributeJsonParameters: [false] },
+		},
 	},
 
 	// ── JSON MODE ─────────────────────────────────────────────────────────────
@@ -232,16 +245,16 @@ export const deleteAttributeProperties: INodeProperties[] = [
 				name: 'partial',
 				type: 'json',
 				default: '{}',
-				placeholder: '{"c_tags": ["value1", "value2"]}',
-				description: 'Remove specific values from array-type custom attributes',
+				placeholder: '{"tags": ["value1", "value2"]}',
+				description: 'Remove specific values from array-type custom attributes. Do not include the c_ prefix in attribute names.',
 			},
 			{
 				displayName: 'Whole',
 				name: 'whole',
 				type: 'json',
 				default: '[]',
-				placeholder: '["c_loyalty_tier", "c_member_code"]',
-				description: 'Custom attribute names to remove completely',
+				placeholder: '["loyalty_tier", "member_code"]',
+				description: 'Custom attribute names to remove completely. Do not include the c_ prefix.',
 			},
 		],
 	},

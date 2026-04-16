@@ -37,51 +37,19 @@ export const exportProperties: INodeProperties[] = [
 		},
 	},
 
-	// --- UI Mode: Attributes Section ---
+	// --- UI Mode: Attributes ---
 	{
+		// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-multi-options
 		displayName: 'Attributes',
-		name: 'exportAttributesSection',
-		type: 'collection',
-		placeholder: 'Add Attribute Filter',
-		default: {},
+		name: 'exportAttributes',
+		type: 'multiOptions',
+		typeOptions: { loadOptionsMethod: 'getAttributeColumns' },
+		default: [],
+		// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-dynamic-multi-options
+		description: 'Select attributes to include in the export. Includes both default attributes (e.g. name, email) and custom attributes (e.g. c_loyalty_tier)',
 		displayOptions: {
 			show: { resource: ['userData'], operation: ['export'], exportJsonParameters: [false], exportGetAllAttributes: [false] },
 		},
-		options: [
-			{
-				displayName: 'Attributes',
-				name: 'selected',
-				type: 'multiOptions',
-				default: [],
-				description: 'Standard attribute names to include in the export',
-				options: [
-					{ name: 'Age', value: 'age' },
-					{ name: 'Birthday', value: 'birthday' },
-					{ name: 'City', value: 'city' },
-					{ name: 'Country', value: 'country' },
-					{ name: 'Email', value: 'email' },
-					{ name: 'Email Opt-In', value: 'email_optin' },
-					{ name: 'GDPR Opt-In', value: 'gdpr' },
-					{ name: 'Gender', value: 'gender' },
-					{ name: 'Language', value: 'language' },
-					{ name: 'Locale', value: 'lo' },
-					{ name: 'Name', value: 'name' },
-					{ name: 'Phone Number', value: 'phone_number' },
-					{ name: 'SMS Opt-In', value: 'sms_optin' },
-					{ name: 'Surname', value: 'surname' },
-					{ name: 'UUID', value: 'uuid' },
-					{ name: 'WhatsApp Opt-In', value: 'whatsapp_optin' },
-				],
-			},
-			{
-				displayName: 'Custom Attributes',
-				name: 'custom',
-				type: 'string',
-				default: '',
-				placeholder: 'c_member_code, c_loyalty_tier',
-				description: 'Comma-separated custom attribute names (with c_ prefix)',
-			},
-		],
 	},
 
 	// --- UI Mode: Events Section ---
@@ -98,16 +66,18 @@ export const exportProperties: INodeProperties[] = [
 			{
 				displayName: 'Start Date',
 				name: 'startDate',
-				type: 'dateTime',
+				type: 'string',
 				default: '',
-				description: 'Start date for events filter',
+				placeholder: '1704067200',
+				description: 'Beginning of the date range for the wanted events as an epoch timestamp',
 			},
 			{
 				displayName: 'End Date',
 				name: 'endDate',
-				type: 'dateTime',
+				type: 'string',
 				default: '',
-				description: 'End date for events filter',
+				placeholder: '1706745600',
+				description: 'End of the date range for the wanted events as an epoch timestamp',
 			},
 			{
 				displayName: 'Wanted Events',
@@ -122,18 +92,23 @@ export const exportProperties: INodeProperties[] = [
 						displayName: 'Event',
 						values: [
 							{
+								// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
 								displayName: 'Event Name',
 								name: 'event_name',
-								type: 'string',
+								type: 'options',
+								typeOptions: { loadOptionsMethod: 'getEventNames' },
 								default: '',
 								required: true,
+								// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-dynamic-options
+								description: 'Select an event from your partner account',
 							},
 							{
 								displayName: 'Params',
 								name: 'params',
 								type: 'string',
 								default: '',
-								description: 'Comma-separated param names (e.g. product_id, amount)',
+								placeholder: 'campaign_id, timestamp',
+								description: 'Wanted event parameters of the event. Comma-separated param names (e.g. product_id, amount).',
 							},
 						],
 					},

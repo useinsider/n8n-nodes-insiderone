@@ -92,9 +92,7 @@ export async function executeDeleteAttribute(
 		// --- Custom Attributes section ---
 		const customSection = this.getNodeParameter('deleteAttributeCustomSection', i, {}) as IDataObject;
 
-		const customWhole = customSection.whole
-			? (customSection.whole as string).split(',').map((s) => s.trim()).filter(Boolean)
-			: [];
+		const customWhole = (customSection.whole ?? []) as string[];
 
 		const customPartial: IDataObject = {};
 		if (customSection.partial) {

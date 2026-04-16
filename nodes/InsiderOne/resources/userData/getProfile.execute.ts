@@ -31,7 +31,6 @@ export async function executeGetProfile(
 
 	let profileAttributes: string[] | IDataObject[];
 	let eventsObj: IDataObject | undefined;
-	let quota = 0;
 
 	if (jsonParameters) {
 		profileAttributes = parseJsonParameter(
@@ -44,8 +43,6 @@ export async function executeGetProfile(
 		if (Object.keys(parsed).length > 0) {
 			eventsObj = parsed;
 		}
-
-		quota = this.getNodeParameter('quotaJson', i, 0) as number;
 	} else {
 		// Attributes section
 		const getAllAttributes = this.getNodeParameter('profileGetAllAttributes', i, false) as boolean;
@@ -53,14 +50,7 @@ export async function executeGetProfile(
 		if (getAllAttributes) {
 			profileAttributes = ['*'];
 		} else {
-			const attrsSection = this.getNodeParameter('profileAttributesSection', i, {}) as IDataObject;
-			const selectedAttrs = (attrsSection.selected ?? []) as string[];
-			profileAttributes = [...selectedAttrs];
-
-			if (attrsSection.custom) {
-				const customAttrs = (attrsSection.custom as string).split(',').map((s) => s.trim()).filter(Boolean);
-				profileAttributes.push(...customAttrs);
-			}
+			profileAttributes = this.getNodeParameter('profileAttributes', i, []) as string[];
 		}
 
 		// Events section
@@ -68,10 +58,10 @@ export async function executeGetProfile(
 		const events: IDataObject = {};
 
 		if (eventsSection.startDate) {
-			events.start_date = Math.floor(new Date(eventsSection.startDate as string).getTime() / 1000);
+			events.start_date = parseInt(eventsSection.startDate as string, 10);
 		}
 		if (eventsSection.endDate) {
-			events.end_date = Math.floor(new Date(eventsSection.endDate as string).getTime() / 1000);
+			events.end_date = parseInt(eventsSection.endDate as string, 10);
 		}
 		if (eventsSection.wantedJson) {
 			events.wanted = parseJsonParameter(eventsSection.wantedJson as string, 'Wanted Events (JSON)');
@@ -92,8 +82,10 @@ export async function executeGetProfile(
 			eventsObj = events;
 		}
 
-		quota = this.getNodeParameter('quota', i, 0) as number;
 	}
+
+	const additionalSettings = this.getNodeParameter('profileAdditionalSettings', i, {}) as IDataObject;
+	const quota = (additionalSettings.quota ?? false) as boolean;
 
 	const body: IDataObject = {
 		...identifierPayload,
@@ -115,8 +107,8 @@ export async function executeGetProfile(
 		);
 	}
 
-	if (quota > 0) {
-		body.quota = quota;
+	if (quota) {
+		body.quota = true;
 	}
 
 	return (await this.helpers.httpRequestWithAuthentication.call(

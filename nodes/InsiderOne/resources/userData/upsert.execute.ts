@@ -43,12 +43,25 @@ export function buildUserObject(
 		const attributesUi = context.getNodeParameter('attributesUi', i, {}) as IDataObject;
 		attributes = { ...attributesUi };
 
-		// Build custom attributes from assignmentCollection
+		// Merge extra default attributes directly into attributes object
+		const extraDefaultRaw = context.getNodeParameter('extraDefaultAttributes', i, { assignments: [] }) as { assignments: Array<{ name: string; value: unknown }> };
+		for (const assignment of extraDefaultRaw.assignments) {
+			if (assignment.name) attributes[assignment.name] = assignment.value as string;
+		}
+
+		// Build custom attributes — wrapped under "custom" key, no c_ prefix needed
 		const customAttributesRaw = context.getNodeParameter('customAttributes', i, { assignments: [] }) as { assignments: Array<{ name: string; value: unknown }> };
-		for (const assignment of customAttributesRaw.assignments) {
-			if (assignment.name) {
-				attributes[assignment.name] = assignment.value as string;
+		if (customAttributesRaw.assignments.length > 0) {
+			const custom: IDataObject = {};
+			for (const assignment of customAttributesRaw.assignments) {
+				if (assignment.name) custom[assignment.name] = assignment.value as string;
 			}
+			attributes.custom = custom;
+		}
+
+		if (attributes.birthday) {
+			const bd = attributes.birthday as string;
+			attributes.birthday = bd && !bd.endsWith('Z') ? `${bd}Z` : bd;
 		}
 
 		if (attributes.static_segment_id) {
