@@ -114,14 +114,6 @@ export const exportProperties: INodeProperties[] = [
 					},
 				],
 			},
-			{
-				displayName: 'Wanted Events (JSON)',
-				name: 'wantedJson',
-				type: 'json',
-				default: '[]',
-				placeholder: '[{"event_name": "purchase", "params": ["product_id"]}]',
-				description: 'Array of wanted event objects as raw JSON (overrides UI wanted events if set)',
-			},
 		],
 	},
 

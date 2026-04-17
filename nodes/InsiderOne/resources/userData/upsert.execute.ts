@@ -14,8 +14,13 @@ export function buildUserObject(
 	if (identifiersUi.email) identifiers.email = identifiersUi.email;
 	if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
 	if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-	if (identifiersUi.custom) {
-		identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
+	const customIdentifiersRaw = context.getNodeParameter('customIdentifiers', i, { assignments: [] }) as { assignments: Array<{ name: string; value: unknown }> };
+	if (customIdentifiersRaw.assignments.length > 0) {
+		const customIds: IDataObject = {};
+		for (const assignment of customIdentifiersRaw.assignments) {
+			if (assignment.name) customIds[assignment.name] = assignment.value as string;
+		}
+		identifiers.custom = customIds;
 	}
 	if (Object.keys(identifiers).length > 0) userObj.identifiers = identifiers;
 
