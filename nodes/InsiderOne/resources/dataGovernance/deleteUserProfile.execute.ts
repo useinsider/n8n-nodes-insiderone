@@ -7,31 +7,26 @@ export async function executeDeleteUserProfile(
 	i: number,
 ): Promise<IDataObject> {
 
-	const identifierType = this.getNodeParameter('deleteUserProfileIdentifierType', i) as string;
-	let identifierPayload: IDataObject;
+	const identifiersUi = this.getNodeParameter('deleteUserProfileIdentifiersUi', i, {}) as IDataObject;
+	const identifierPayload: IDataObject = {};
 
-	if (identifierType === 'insiderId') {
-		const insiderId = this.getNodeParameter('deleteUserProfileInsiderId', i) as string;
-		identifierPayload = { insider_id: insiderId };
-	} else {
-		const identifiersUi = this.getNodeParameter('deleteUserProfileIdentifiersUi', i, {}) as IDataObject;
-		const identifiers: IDataObject = {};
-		if (identifiersUi.email) identifiers.email = identifiersUi.email;
-		if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
-		if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-		if (identifiersUi.custom) {
-			identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
-		}
+	if (identifiersUi.insider_id) identifierPayload.insider_id = identifiersUi.insider_id;
 
-		if (Object.keys(identifiers).length === 0) {
-			throw new NodeOperationError(
-				this.getNode(),
-				'At least one identifier must be provided',
-				{ itemIndex: i },
-			);
-		}
+	const identifiers: IDataObject = {};
+	if (identifiersUi.email) identifiers.email = identifiersUi.email;
+	if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
+	if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
+	if (identifiersUi.custom) {
+		identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
+	}
+	if (Object.keys(identifiers).length > 0) identifierPayload.identifiers = identifiers;
 
-		identifierPayload = { identifiers };
+	if (Object.keys(identifierPayload).length === 0) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'At least one identifier must be provided',
+			{ itemIndex: i },
+		);
 	}
 
 	return (await this.helpers.httpRequestWithAuthentication.call(

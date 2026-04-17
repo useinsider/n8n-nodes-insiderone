@@ -2,51 +2,21 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const upsertProperties: INodeProperties[] = [
 	{
-		displayName: 'Identifier Type',
-		name: 'identifierType',
-		type: 'options',
-		default: 'insiderId',
-		options: [
-			{
-				name: 'Insider ID',
-				value: 'insiderId',
-				description: 'Identify user by Insider ID',
-			},
-			{
-				name: 'Identifiers',
-				value: 'identifiers',
-				description: 'Identify user by email, UUID, phone number, or custom identifiers',
-			},
-		],
-		displayOptions: {
-			show: { resource: ['userData'], operation: ['upsert'] },
-		},
-	},
-	{
-		displayName: 'Insider ID',
-		name: 'insiderId',
-		type: 'string',
-		default: '',
-		required: true,
-		description: 'The unique Insider ID for the user (e.g., sampleinsiderid)',
-		displayOptions: {
-			show: { resource: ['userData'], operation: ['upsert'], identifierType: ['insiderId'] },
-		},
-	},
-	{
 		displayName: 'Identifiers',
 		name: 'identifiersUi',
 		type: 'collection',
 		placeholder: 'Add Identifier',
 		default: {},
+		description: 'At least one identifier is required. insider_id and other identifiers can be combined.',
 		displayOptions: {
-			show: { resource: ['userData'], operation: ['upsert'], identifierType: ['identifiers'] },
+			show: { resource: ['userData'], operation: ['upsert'] },
 		},
 		options: [
+			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
 			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'sample@useinsider.com', description: 'User email address' },
+			{ displayName: 'Insider ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider ID for the user' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
-			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
 		],
 	},
 	{

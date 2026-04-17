@@ -5,23 +5,19 @@ export function buildUserObject(
 	context: IExecuteFunctions,
 	i: number,
 ): IDataObject {
-	const identifierType = context.getNodeParameter('identifierType', i) as string;
+	const identifiersUi = context.getNodeParameter('identifiersUi', i, {}) as IDataObject;
+	const userObj: IDataObject = {};
 
-	let userObj: IDataObject;
-	if (identifierType === 'insiderId') {
-		const insiderId = context.getNodeParameter('insiderId', i) as string;
-		userObj = { insider_id: insiderId };
-	} else {
-		const identifiersUi = context.getNodeParameter('identifiersUi', i, {}) as IDataObject;
-		const identifiers: IDataObject = {};
-		if (identifiersUi.email) identifiers.email = identifiersUi.email;
-		if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
-		if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-		if (identifiersUi.custom) {
-			identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
-		}
-		userObj = { identifiers };
+	if (identifiersUi.insider_id) userObj.insider_id = identifiersUi.insider_id;
+
+	const identifiers: IDataObject = {};
+	if (identifiersUi.email) identifiers.email = identifiersUi.email;
+	if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
+	if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
+	if (identifiersUi.custom) {
+		identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
 	}
+	if (Object.keys(identifiers).length > 0) userObj.identifiers = identifiers;
 
 	const additionalSettings = context.getNodeParameter('additionalSettings', i, {}) as IDataObject;
 	const notAppend = (additionalSettings.notAppend ?? true) as boolean;
@@ -128,7 +124,6 @@ export async function executeUpsert(
 
 	const body: IDataObject = {
 		users: [user],
-		platform: 'n8n',
 		skip_hook: skipHook,
 	};
 
@@ -160,7 +155,6 @@ export async function executeUpsertBatch(
 
 	const body: IDataObject = {
 		users,
-		platform: 'n8n',
 		skip_hook: skipHook,
 	};
 
