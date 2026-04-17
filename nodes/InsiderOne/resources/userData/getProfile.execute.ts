@@ -7,25 +7,19 @@ export async function executeGetProfile(
 	i: number,
 ): Promise<IDataObject> {
 	// --- Identifiers ---
-	// insider_id goes at the top level of the body
-	// identifiers mode wraps fields under an "identifiers" key
-	const identifierType = this.getNodeParameter('profileIdentifierType', i) as string;
+	const profileIdentifiersUi = this.getNodeParameter('profileIdentifiersUi', i, {}) as IDataObject;
+	const identifierPayload: IDataObject = {};
 
-	let identifierPayload: IDataObject;
-	if (identifierType === 'insiderId') {
-		const insiderId = this.getNodeParameter('profileInsiderId', i) as string;
-		identifierPayload = { insider_id: insiderId };
-	} else {
-		const identifiersUi = this.getNodeParameter('profileIdentifiersUi', i, {}) as IDataObject;
-		const identifiers: IDataObject = {};
-		if (identifiersUi.email) identifiers.email = identifiersUi.email;
-		if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
-		if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-		if (identifiersUi.custom) {
-			identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
-		}
-		identifierPayload = { identifiers };
+	if (profileIdentifiersUi.insider_id) identifierPayload.insider_id = profileIdentifiersUi.insider_id;
+
+	const identifiers: IDataObject = {};
+	if (profileIdentifiersUi.email) identifiers.email = profileIdentifiersUi.email;
+	if (profileIdentifiersUi.uuid) identifiers.uuid = profileIdentifiersUi.uuid;
+	if (profileIdentifiersUi.phone_number) identifiers.phone_number = profileIdentifiersUi.phone_number;
+	if (profileIdentifiersUi.custom) {
+		identifiers.custom = parseJsonParameter(profileIdentifiersUi.custom as string, 'Custom Identifiers');
 	}
+	if (Object.keys(identifiers).length > 0) identifierPayload.identifiers = identifiers;
 
 	const jsonParameters = this.getNodeParameter('profileJsonParameters', i, false) as boolean;
 

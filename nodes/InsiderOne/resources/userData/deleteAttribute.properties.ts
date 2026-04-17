@@ -2,43 +2,20 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const deleteAttributeProperties: INodeProperties[] = [
 
-	// --- Identifier Type (always visible) ---
-	{
-		displayName: 'Identifier Type',
-		name: 'deleteAttributeIdentifierType',
-		type: 'options',
-		default: 'insiderId',
-		options: [
-			{ name: 'Insider ID', value: 'insiderId', description: 'Look up user by Insider ID' },
-			{ name: 'Identifiers', value: 'identifiers', description: 'Look up user by email, UUID, phone number, or custom identifiers' },
-		],
-		displayOptions: {
-			show: { resource: ['userData'], operation: ['deleteAttribute'] },
-		},
-	},
-	{
-		displayName: 'Insider ID',
-		name: 'deleteAttributeInsiderId',
-		type: 'string',
-		default: '',
-		required: true,
-		description: 'The unique Insider ID for the user',
-		displayOptions: {
-			show: { resource: ['userData'], operation: ['deleteAttribute'], deleteAttributeIdentifierType: ['insiderId'] },
-		},
-	},
 	{
 		displayName: 'Identifiers',
 		name: 'deleteAttributeIdentifiersUi',
 		type: 'collection',
 		placeholder: 'Add Identifier',
 		default: {},
+		description: 'At least one identifier is required. insider_id and other identifiers can be combined.',
 		displayOptions: {
-			show: { resource: ['userData'], operation: ['deleteAttribute'], deleteAttributeIdentifierType: ['identifiers'] },
+			show: { resource: ['userData'], operation: ['deleteAttribute'] },
 		},
 		options: [
 			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
 			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
+			{ displayName: 'Insider ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider ID for the user' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
