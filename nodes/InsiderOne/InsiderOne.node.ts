@@ -1,11 +1,14 @@
 import type {
 	IDataObject,
 	IExecuteFunctions,
+	ILoadOptionsFunctions,
 	INodeExecutionData,
+	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
 import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { BASE_URL } from './shared/utils';
 
 import {
 	userDataProperties,
@@ -14,10 +17,13 @@ import {
 	executeGetProfile,
 	executeExport,
 	executeDeleteAttribute,
+	executeUpdateIdentifiers,
+	executeDeleteIdentifiers,
 } from './resources/userData';
 import {
 	dataGovernanceProperties,
-	executeUnsubscribeEmail,
+	executeAnonymizeUser,
+	executeDeleteUserProfile,
 } from './resources/dataGovernance';
 
 type OperationHandler = (
@@ -29,8 +35,11 @@ const operationRouter: Record<string, OperationHandler> = {
 	upsert: executeUpsert,
 	deleteAttribute: executeDeleteAttribute,
 	getProfile: executeGetProfile,
+	updateIdentifiers: executeUpdateIdentifiers,
+	deleteIdentifiers: executeDeleteIdentifiers,
+	anonymizeUser: executeAnonymizeUser,
+	deleteUserProfile: executeDeleteUserProfile,
 	export: executeExport,
-	unsubscribeEmail: executeUnsubscribeEmail,
 };
 
 export class InsiderOne implements INodeType {
@@ -69,6 +78,125 @@ export class InsiderOne implements INodeType {
 			...userDataProperties,
 			...dataGovernanceProperties,
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			async getAttributeColumns(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'insiderOneApi',
+					{
+						method: 'POST',
+						url: `${BASE_URL}/api/user/v3/metadata/columns`,
+						body: { table: 'contacts' },
+						json: true,
+					},
+				) as Array<{ key: string; display_name: string }>;
+
+				return response.map((item) => ({
+					name: item.display_name || item.key,
+					value: item.key,
+				}));
+			},
+
+			async getCustomAttributes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'insiderOneApi',
+					{
+						method: 'POST',
+						url: `${BASE_URL}/api/user/v3/metadata/columns`,
+						body: { table: 'contacts' },
+						json: true,
+					},
+				) as Array<{ key: string; display_name: string; type?: string }>;
+
+				return response
+					.filter((item) => item.key.startsWith('c_'))
+					.map((item) => ({
+						name: item.display_name || item.key,
+						value: item.key.replace(/^c_/, ''),
+					}));
+			},
+
+			async getCustomArrayAttributes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'insiderOneApi',
+					{
+						method: 'POST',
+						url: `${BASE_URL}/api/user/v3/metadata/columns`,
+						body: { table: 'contacts' },
+						json: true,
+					},
+				) as Array<{ key: string; display_name: string; type?: string }>;
+
+				return response
+					.filter((item) => item.key.startsWith('c_') && item.type === 'array')
+					.map((item) => ({
+						name: item.display_name || item.key,
+						value: item.key.replace(/^c_/, ''),
+					}));
+			},
+
+			async getEventNames(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'insiderOneApi',
+					{
+						method: 'POST',
+						url: `${BASE_URL}/api/user/v3/metadata/columns`,
+						body: { table: 'events' },
+						json: true,
+					},
+				) as Array<{ key: string; display_name: string }>;
+
+				return response.map((item) => ({
+					name: item.display_name || item.key,
+					value: item.key,
+				}));
+			},
+
+			async getEventParams(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const eventName = this.getCurrentNodeParameter('profileEventsSection.eventName') as string;
+
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'insiderOneApi',
+					{
+						method: 'POST',
+						url: `${BASE_URL}/api/user/v3/metadata/columns`,
+						body: { table: 'events' },
+						json: true,
+					},
+				) as Array<{ key: string; display_name: string; params?: Array<{ key: string; display_name: string }> }>;
+
+				// If event_name is selected, return only that event's params
+				if (eventName) {
+					const event = response.find((item) => item.key === eventName);
+					if (event?.params) {
+						return event.params.map((param) => ({
+							name: param.display_name || param.key,
+							value: param.key,
+						}));
+					}
+				}
+
+				// Fallback: return all params from all events (deduplicated)
+				const seen = new Set<string>();
+				const allParams: INodePropertyOptions[] = [];
+				for (const event of response) {
+					for (const param of event.params ?? []) {
+						if (!seen.has(param.key)) {
+							seen.add(param.key);
+							allParams.push({ name: param.display_name || param.key, value: param.key });
+						}
+					}
+				}
+				return allParams;
+			},
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {

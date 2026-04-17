@@ -1,7 +1,9 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { unsubscribeEmailProperties } from './unsubscribeEmail.properties';
+import { anonymizeUserProperties } from './anonymizeUser.properties';
+import { deleteUserProfileProperties } from './deleteUserProfile.properties';
 
-export { executeUnsubscribeEmail } from './unsubscribeEmail.execute';
+export { executeAnonymizeUser } from './anonymizeUser.execute';
+export { executeDeleteUserProfile } from './deleteUserProfile.execute';
 
 export const dataGovernanceOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -13,16 +15,23 @@ export const dataGovernanceOperations: INodeProperties = {
 	},
 	options: [
 		{
-			name: 'Unsubscribe Email',
-			value: 'unsubscribeEmail',
-			description: 'Unsubscribe an email address from the database',
-			action: 'Unsubscribe email',
+			name: 'Delete User Profile',
+			value: 'deleteUserProfile',
+			description: 'Permanently delete a user profile',
+			action: 'Delete user profile',
+		},
+		{
+			name: "Delete User's PII Data",
+			value: 'anonymizeUser',
+			description: "Anonymize a user's PII data",
+			action: 'Delete user PII data',
 		},
 	],
-	default: 'unsubscribeEmail',
+	default: 'deleteUserProfile',
 };
 
 export const dataGovernanceProperties: INodeProperties[] = [
 	dataGovernanceOperations,
-	...unsubscribeEmailProperties,
+	...deleteUserProfileProperties,
+	...anonymizeUserProperties,
 ];

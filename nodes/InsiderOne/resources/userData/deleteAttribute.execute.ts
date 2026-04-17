@@ -9,26 +9,20 @@ export async function executeDeleteAttribute(
 
 	const jsonParameters = this.getNodeParameter('deleteAttributeJsonParameters', i, false) as boolean;
 
-	// --- Identifiers (always) ---
-	// insider_id goes at the top level of the user object
-	// identifiers mode wraps fields under an "identifiers" key
-	const identifierType = this.getNodeParameter('deleteAttributeIdentifierType', i) as string;
-	let identifierPayload: IDataObject;
+	// --- Identifiers ---
+	const deleteIdentifiersUi = this.getNodeParameter('deleteAttributeIdentifiersUi', i, {}) as IDataObject;
+	const identifierPayload: IDataObject = {};
 
-	if (identifierType === 'insiderId') {
-		const insiderId = this.getNodeParameter('deleteAttributeInsiderId', i) as string;
-		identifierPayload = { insider_id: insiderId };
-	} else {
-		const identifiersUi = this.getNodeParameter('deleteAttributeIdentifiersUi', i, {}) as IDataObject;
-		const identifiers: IDataObject = {};
-		if (identifiersUi.email) identifiers.email = identifiersUi.email;
-		if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
-		if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-		if (identifiersUi.custom) {
-			identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
-		}
-		identifierPayload = { identifiers };
+	if (deleteIdentifiersUi.insider_id) identifierPayload.insider_id = deleteIdentifiersUi.insider_id;
+
+	const identifiers: IDataObject = {};
+	if (deleteIdentifiersUi.email) identifiers.email = deleteIdentifiersUi.email;
+	if (deleteIdentifiersUi.uuid) identifiers.uuid = deleteIdentifiersUi.uuid;
+	if (deleteIdentifiersUi.phone_number) identifiers.phone_number = deleteIdentifiersUi.phone_number;
+	if (deleteIdentifiersUi.custom) {
+		identifiers.custom = parseJsonParameter(deleteIdentifiersUi.custom as string, 'Custom Identifiers');
 	}
+	if (Object.keys(identifiers).length > 0) identifierPayload.identifiers = identifiers;
 
 	let users: IDataObject[];
 
@@ -92,9 +86,7 @@ export async function executeDeleteAttribute(
 		// --- Custom Attributes section ---
 		const customSection = this.getNodeParameter('deleteAttributeCustomSection', i, {}) as IDataObject;
 
-		const customWhole = customSection.whole
-			? (customSection.whole as string).split(',').map((s) => s.trim()).filter(Boolean)
-			: [];
+		const customWhole = (customSection.whole ?? []) as string[];
 
 		const customPartial: IDataObject = {};
 		if (customSection.partial) {

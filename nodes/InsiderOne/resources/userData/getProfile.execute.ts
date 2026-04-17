@@ -7,31 +7,24 @@ export async function executeGetProfile(
 	i: number,
 ): Promise<IDataObject> {
 	// --- Identifiers ---
-	// insider_id goes at the top level of the body
-	// identifiers mode wraps fields under an "identifiers" key
-	const identifierType = this.getNodeParameter('profileIdentifierType', i) as string;
+	const profileIdentifiersUi = this.getNodeParameter('profileIdentifiersUi', i, {}) as IDataObject;
+	const identifierPayload: IDataObject = {};
 
-	let identifierPayload: IDataObject;
-	if (identifierType === 'insiderId') {
-		const insiderId = this.getNodeParameter('profileInsiderId', i) as string;
-		identifierPayload = { insider_id: insiderId };
-	} else {
-		const identifiersUi = this.getNodeParameter('profileIdentifiersUi', i, {}) as IDataObject;
-		const identifiers: IDataObject = {};
-		if (identifiersUi.email) identifiers.email = identifiersUi.email;
-		if (identifiersUi.uuid) identifiers.uuid = identifiersUi.uuid;
-		if (identifiersUi.phone_number) identifiers.phone_number = identifiersUi.phone_number;
-		if (identifiersUi.custom) {
-			identifiers.custom = parseJsonParameter(identifiersUi.custom as string, 'Custom Identifiers');
-		}
-		identifierPayload = { identifiers };
+	if (profileIdentifiersUi.insider_id) identifierPayload.insider_id = profileIdentifiersUi.insider_id;
+
+	const identifiers: IDataObject = {};
+	if (profileIdentifiersUi.email) identifiers.email = profileIdentifiersUi.email;
+	if (profileIdentifiersUi.uuid) identifiers.uuid = profileIdentifiersUi.uuid;
+	if (profileIdentifiersUi.phone_number) identifiers.phone_number = profileIdentifiersUi.phone_number;
+	if (profileIdentifiersUi.custom) {
+		identifiers.custom = parseJsonParameter(profileIdentifiersUi.custom as string, 'Custom Identifiers');
 	}
+	if (Object.keys(identifiers).length > 0) identifierPayload.identifiers = identifiers;
 
 	const jsonParameters = this.getNodeParameter('profileJsonParameters', i, false) as boolean;
 
 	let profileAttributes: string[] | IDataObject[];
 	let eventsObj: IDataObject | undefined;
-	let quota = 0;
 
 	if (jsonParameters) {
 		profileAttributes = parseJsonParameter(
@@ -44,8 +37,6 @@ export async function executeGetProfile(
 		if (Object.keys(parsed).length > 0) {
 			eventsObj = parsed;
 		}
-
-		quota = this.getNodeParameter('quotaJson', i, 0) as number;
 	} else {
 		// Attributes section
 		const getAllAttributes = this.getNodeParameter('profileGetAllAttributes', i, false) as boolean;
@@ -53,14 +44,7 @@ export async function executeGetProfile(
 		if (getAllAttributes) {
 			profileAttributes = ['*'];
 		} else {
-			const attrsSection = this.getNodeParameter('profileAttributesSection', i, {}) as IDataObject;
-			const selectedAttrs = (attrsSection.selected ?? []) as string[];
-			profileAttributes = [...selectedAttrs];
-
-			if (attrsSection.custom) {
-				const customAttrs = (attrsSection.custom as string).split(',').map((s) => s.trim()).filter(Boolean);
-				profileAttributes.push(...customAttrs);
-			}
+			profileAttributes = this.getNodeParameter('profileAttributes', i, []) as string[];
 		}
 
 		// Events section
@@ -68,14 +52,12 @@ export async function executeGetProfile(
 		const events: IDataObject = {};
 
 		if (eventsSection.startDate) {
-			events.start_date = Math.floor(new Date(eventsSection.startDate as string).getTime() / 1000);
+			events.start_date = parseInt(eventsSection.startDate as string, 10);
 		}
 		if (eventsSection.endDate) {
-			events.end_date = Math.floor(new Date(eventsSection.endDate as string).getTime() / 1000);
+			events.end_date = parseInt(eventsSection.endDate as string, 10);
 		}
-		if (eventsSection.wantedJson) {
-			events.wanted = parseJsonParameter(eventsSection.wantedJson as string, 'Wanted Events (JSON)');
-		} else if (eventsSection.wantedEvents) {
+		if (eventsSection.wantedEvents) {
 			const wantedUi = eventsSection.wantedEvents as IDataObject;
 			if (wantedUi.eventValues) {
 				events.wanted = (wantedUi.eventValues as IDataObject[]).map((ev) => {
@@ -92,8 +74,10 @@ export async function executeGetProfile(
 			eventsObj = events;
 		}
 
-		quota = this.getNodeParameter('quota', i, 0) as number;
 	}
+
+	const additionalSettings = this.getNodeParameter('profileAdditionalSettings', i, {}) as IDataObject;
+	const quota = (additionalSettings.quota ?? false) as boolean;
 
 	const body: IDataObject = {
 		...identifierPayload,
@@ -115,8 +99,8 @@ export async function executeGetProfile(
 		);
 	}
 
-	if (quota > 0) {
-		body.quota = quota;
+	if (quota) {
+		body.quota = true;
 	}
 
 	return (await this.helpers.httpRequestWithAuthentication.call(

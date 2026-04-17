@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"description": "n8n community node for Insider One integration",
 	"license": "MIT",
-	"homepage": "https://github.com/aspect-apps/n8n-nodes-insiderone",
+	"homepage": "https://github.com/useinsider/n8n-nodes-insiderone",
 	"keywords": [
 		"n8n-community-node-package"
 	],
