@@ -57,9 +57,7 @@ export async function executeGetProfile(
 		if (eventsSection.endDate) {
 			events.end_date = parseInt(eventsSection.endDate as string, 10);
 		}
-		if (eventsSection.wantedJson) {
-			events.wanted = parseJsonParameter(eventsSection.wantedJson as string, 'Wanted Events (JSON)');
-		} else if (eventsSection.wantedEvents) {
+		if (eventsSection.wantedEvents) {
 			const wantedUi = eventsSection.wantedEvents as IDataObject;
 			if (wantedUi.eventValues) {
 				events.wanted = (wantedUi.eventValues as IDataObject[]).map((ev) => {
