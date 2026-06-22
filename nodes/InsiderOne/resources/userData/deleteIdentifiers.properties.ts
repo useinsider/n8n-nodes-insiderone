@@ -4,7 +4,7 @@ export const deleteIdentifiersProperties: INodeProperties[] = [
 
 	// --- JSON Parameters toggle ---
 	{
-		displayName: 'JSON Parameters',
+		displayName: 'Enable JSON Parameters',
 		name: 'deleteIdentifiersJsonParameters',
 		type: 'boolean',
 		default: false,
@@ -28,7 +28,7 @@ export const deleteIdentifiersProperties: INodeProperties[] = [
 		},
 		options: [
 			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
@@ -37,11 +37,11 @@ export const deleteIdentifiersProperties: INodeProperties[] = [
 	// ── JSON MODE ─────────────────────────────────────────────────────────────
 
 	{
-		displayName: 'Identifiers (JSON)',
+		displayName: 'Identifiers',
 		name: 'deleteIdentifiersJson',
 		type: 'json',
 		default: '{}',
-		placeholder: '{"email": "sample@useinsider.com"}',
+		placeholder: '{"email": "sample@mail.com"}',
 		description: 'Identifiers object to delete from the user profile',
 		displayOptions: {
 			show: { resource: ['userData'], operation: ['deleteIdentifiers'], deleteIdentifiersJsonParameters: [true] },

@@ -138,7 +138,7 @@ export async function executeUpsert(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'POST',
 			url: `${BASE_URL}/api/user/v1/upsert`,
@@ -169,7 +169,7 @@ export async function executeUpsertBatch(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'POST',
 			url: `${BASE_URL}/api/user/v1/upsert`,

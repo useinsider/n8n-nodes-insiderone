@@ -37,7 +37,7 @@ export async function executeDeleteIdentifiers(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'DELETE',
 			url: `${BASE_URL}/api/user/v1/identity`,

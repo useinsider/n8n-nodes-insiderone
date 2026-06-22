@@ -15,7 +15,7 @@ export const exportProperties: INodeProperties[] = [
 
 	// --- JSON Parameters toggle ---
 	{
-		displayName: 'JSON Parameters',
+		displayName: 'Enable JSON Parameters',
 		name: 'exportJsonParameters',
 		type: 'boolean',
 		default: false,
@@ -103,7 +103,7 @@ export const exportProperties: INodeProperties[] = [
 								description: 'Select an event from your partner account',
 							},
 							{
-								displayName: 'Params',
+								displayName: 'Event Parameters',
 								name: 'params',
 								type: 'string',
 								default: '',

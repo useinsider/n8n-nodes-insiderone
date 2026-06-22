@@ -59,7 +59,7 @@ export class InsiderOne implements INodeType {
 		usableAsTool: true,
 		credentials: [
 			{
-				name: 'insiderOneApi',
+				name: 'insiderOneUnificationApi',
 				required: true,
 			},
 		],
@@ -85,7 +85,7 @@ export class InsiderOne implements INodeType {
 			async getAttributeColumns(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const response = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'insiderOneApi',
+					'insiderOneUnificationApi',
 					{
 						method: 'POST',
 						url: `${BASE_URL}/api/user/v3/metadata/columns`,
@@ -103,7 +103,7 @@ export class InsiderOne implements INodeType {
 			async getCustomAttributes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const response = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'insiderOneApi',
+					'insiderOneUnificationApi',
 					{
 						method: 'POST',
 						url: `${BASE_URL}/api/user/v3/metadata/columns`,
@@ -123,7 +123,7 @@ export class InsiderOne implements INodeType {
 			async getCustomArrayAttributes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const response = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'insiderOneApi',
+					'insiderOneUnificationApi',
 					{
 						method: 'POST',
 						url: `${BASE_URL}/api/user/v3/metadata/columns`,
@@ -143,7 +143,7 @@ export class InsiderOne implements INodeType {
 			async getEventNames(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				const response = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'insiderOneApi',
+					'insiderOneUnificationApi',
 					{
 						method: 'POST',
 						url: `${BASE_URL}/api/user/v3/metadata/columns`,
@@ -163,7 +163,7 @@ export class InsiderOne implements INodeType {
 
 				const response = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'insiderOneApi',
+					'insiderOneUnificationApi',
 					{
 						method: 'POST',
 						url: `${BASE_URL}/api/user/v3/metadata/columns`,

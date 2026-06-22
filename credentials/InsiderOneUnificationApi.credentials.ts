@@ -1,13 +1,9 @@
-import type {
-	IAuthenticateGeneric,
-	ICredentialType,
-	INodeProperties,
-} from 'n8n-workflow';
+import type { IAuthenticateGeneric, ICredentialType, INodeProperties } from 'n8n-workflow';
 
-export class InsiderOneApi implements ICredentialType {
-	name = 'insiderOneApi';
+export class InsiderOneUnificationApi implements ICredentialType {
+	name = 'insiderOneUnificationApi';
 
-	displayName = 'Insider One API';
+	displayName = 'Insider One Unification API';
 
 	icon = { light: 'file:insiderone.svg', dark: 'file:insiderone.svg' } as const;
 
@@ -15,16 +11,16 @@ export class InsiderOneApi implements ICredentialType {
 
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Partner Name',
+			displayName: 'Insider One Inone Name',
 			name: 'partnerName',
 			type: 'string',
 			default: '',
 			placeholder: 'mybrand',
-			description: 'Your Insider partner/brand name (lowercase)',
+			description: 'Your Insider One Inone name (lowercase)',
 			required: true,
 		},
 		{
-			displayName: 'Request Token',
+			displayName: 'Unified Customer Database API Token',
 			name: 'requestToken',
 			type: 'string',
 			typeOptions: { password: true },
