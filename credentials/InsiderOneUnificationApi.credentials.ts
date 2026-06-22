@@ -1,4 +1,4 @@
-import type { IAuthenticateGeneric, ICredentialType, INodeProperties } from 'n8n-workflow';
+import type { IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INodeProperties } from 'n8n-workflow';
 
 export class InsiderOneUnificationApi implements ICredentialType {
 	name = 'insiderOneUnificationApi';
@@ -30,24 +30,12 @@ export class InsiderOneUnificationApi implements ICredentialType {
 		},
 	];
 
-	test = {
+	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://unification.useinsider.com',
-			url: '/api/user/v1/upsert',
-			method: 'POST' as const,
-			body: {
-				users: [
-					{
-						identifiers: { email: 'insiderone@mail.com' },
-						attributes: {
-							name: 'Insider One Academy',
-							gdpr_optin: true,
-							phone_number: '+6512345678',
-						},
-					},
-				],
-				platform: 'n8n',
-			},
+			url: '/api/user/v3/metadata/columns',
+			method: 'POST',
+			body: { table: 'contacts' },
 		},
 	};
 
