@@ -29,7 +29,7 @@ export const updateIdentifiersProperties: INodeProperties[] = [
 		},
 		options: [
 			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
@@ -47,7 +47,7 @@ export const updateIdentifiersProperties: INodeProperties[] = [
 		},
 		options: [
 			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz456"}', description: 'Custom identifier key-value pairs' },
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'newuser@example.com', description: 'New email address' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'newuser@example.com', description: 'New email address' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765433', description: 'New phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'New UUID' },
 		],
@@ -60,7 +60,7 @@ export const updateIdentifiersProperties: INodeProperties[] = [
 		name: 'updateIdentifiersOldJson',
 		type: 'json',
 		default: '{}',
-		placeholder: '{"email": "sample@useinsider.com"}',
+		placeholder: '{"email": "sample@mail.com"}',
 		description: 'Current identifier object to be replaced',
 		displayOptions: {
 			show: { resource: ['userData'], operation: ['updateIdentifiers'], updateIdentifiersJsonParameters: [true] },
@@ -71,7 +71,7 @@ export const updateIdentifiersProperties: INodeProperties[] = [
 		name: 'updateIdentifiersNewJson',
 		type: 'json',
 		default: '{}',
-		placeholder: '{"email": "sample2@useinsider.com"}',
+		placeholder: '{"email": "sample2@mail.com"}',
 		description: 'Updated identifier object',
 		displayOptions: {
 			show: { resource: ['userData'], operation: ['updateIdentifiers'], updateIdentifiersJsonParameters: [true] },

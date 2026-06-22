@@ -3,5 +3,7 @@ dist/
 *.js.map
 .tsbuildinfo
 .claude/
+CLAUDE.md
 package-lock.json
 n8n_data/
+.DS_Store

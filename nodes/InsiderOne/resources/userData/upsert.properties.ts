@@ -12,8 +12,8 @@ export const upsertProperties: INodeProperties[] = [
 			show: { resource: ['userData'], operation: ['upsert'] },
 		},
 		options: [
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'sample@useinsider.com', description: 'User email address' },
-			{ displayName: 'Insider ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider ID for the user' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'sample@useinsider.com', description: 'User email address' },
+			{ displayName: 'Insider One ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider One ID for the user' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
@@ -105,7 +105,7 @@ export const upsertProperties: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Custom attribute names do not require a <code>c_</code> prefix',
+		displayName: 'Custom attribute names don\'t require a <code>c_</code> prefix.',
 		name: 'customAttributesNotice',
 		type: 'notice',
 		default: '',
@@ -154,20 +154,20 @@ export const upsertProperties: INodeProperties[] = [
 						description: 'Event timestamp in RFC 3339 format (e.g. 2024-01-15T10:30:00Z). A \'Z\' suffix will be appended automatically if omitted.',
 					},
 					{
-						displayName: 'Event Params',
+						displayName: 'Event Parameters',
 						name: 'event_params',
 						type: 'assignmentCollection',
 						default: {},
 						description: 'Standard event parameters (e.g. product_id, unit_price, currency)',
 					},
 					{
-						displayName: 'Custom event parameters do not require a <code>c_</code>	prefix',
+						displayName: 'Custom event parameters do\'not require a <code>c_</code>	prefix.',
 						name: 'customEventParamsNotice',
 						type: 'notice',
 						default: '',
 					},
 					{
-						displayName: 'Custom Event Params',
+						displayName: 'Custom Event Parameters',
 						name: 'custom',
 						type: 'assignmentCollection',
 						default: {},

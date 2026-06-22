@@ -14,8 +14,8 @@ export const deleteAttributeProperties: INodeProperties[] = [
 		},
 		options: [
 			{ displayName: 'Custom Identifiers (JSON)', name: 'custom', type: 'json', default: '{}', placeholder: '{"user_loyalty_id": "xyz123"}', description: 'Custom identifier key-value pairs' },
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
-			{ displayName: 'Insider ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider ID for the user' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
+			{ displayName: 'Insider One ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider One ID for the user' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
@@ -23,7 +23,7 @@ export const deleteAttributeProperties: INodeProperties[] = [
 
 	// --- JSON Parameters toggle ---
 	{
-		displayName: 'JSON Parameters',
+		displayName: 'Enable JSON Parameters',
 		name: 'deleteAttributeJsonParameters',
 		type: 'boolean',
 		default: false,
@@ -91,7 +91,7 @@ export const deleteAttributeProperties: INodeProperties[] = [
 					{ name: 'Birthday', value: 'birthday' },
 					{ name: 'City', value: 'city' },
 					{ name: 'Country', value: 'country' },
-					{ name: 'Email', value: 'email' },
+					{ name: 'Email Address', value: 'email' },
 					{ name: 'Email Opt-In', value: 'email_optin' },
 					{ name: 'GDPR Opt-In', value: 'gdpr_optin' },
 					{ name: 'Gender', value: 'gender' },
@@ -166,7 +166,7 @@ export const deleteAttributeProperties: INodeProperties[] = [
 		],
 	},
 	{
-		displayName: 'Do not include the <code>c_</code> prefix in custom attribute names. The API expects the raw attribute name (e.g. <code>loyalty_tier</code>, not <code>c_loyalty_tier</code>).',
+		displayName: 'Custom Attribute names don\'t require a <code>c_</code> prefix. Use only raw attribute names, such as <code>loyalty_tier</code>, not <code>c_loyalty_tier</code>.',
 		name: 'deleteAttributeCustomNotice',
 		type: 'notice',
 		default: '',

@@ -1,8 +1,4 @@
-import type {
-	IAuthenticateGeneric,
-	ICredentialType,
-	INodeProperties,
-} from 'n8n-workflow';
+import type { IAuthenticateGeneric, ICredentialType, INodeProperties } from 'n8n-workflow';
 
 export class InsiderOneApi implements ICredentialType {
 	name = 'insiderOneApi';
@@ -15,12 +11,12 @@ export class InsiderOneApi implements ICredentialType {
 
 	properties: INodeProperties[] = [
 		{
-			displayName: 'Partner Name',
+			displayName: 'Inone Name',
 			name: 'partnerName',
 			type: 'string',
 			default: '',
 			placeholder: 'mybrand',
-			description: 'Your Insider partner/brand name (lowercase)',
+			description: 'Your Insider One Inone name (lowercase)',
 			required: true,
 		},
 		{

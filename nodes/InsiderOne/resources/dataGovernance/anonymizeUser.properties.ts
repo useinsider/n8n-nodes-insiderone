@@ -13,14 +13,14 @@ export const anonymizeUserProperties: INodeProperties[] = [
 			show: { resource: ['dataGovernance'], operation: ['anonymizeUser'] },
 		},
 		options: [
-			{ displayName: 'Email', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
-			{ displayName: 'Insider ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider ID for the user' },
+			{ displayName: 'Email Address', name: 'email', type: 'string', default: '', placeholder: 'user@example.com', description: 'User email address' },
+			{ displayName: 'Insider One ID', name: 'insider_id', type: 'string', default: '', description: 'The unique Insider One ID for the user' },
 			{ displayName: 'Phone Number', name: 'phone_number', type: 'string', default: '', placeholder: '+6598765432', description: 'Phone number in E.164 format' },
 			{ displayName: 'UUID', name: 'uuid', type: 'string', default: '', description: 'User UUID' },
 		],
 	},
 	{
-		displayName: 'This action permanently removes the user\'s PII data and cannot be undone.',
+		displayName: 'This action permanently removes the user\'s PII data and can\'t be undone.',
 		name: 'anonymizeUserWarning',
 		type: 'notice',
 		default: '',
