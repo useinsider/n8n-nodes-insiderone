@@ -8,8 +8,7 @@
 		"n8n-community-node-package"
 	],
 	"author": {
-		"name": "Insider One",
-		"email": "info@useinsider.com"
+		"name": "Insider One"
 	},
 	"repository": {
 		"type": "git",
