@@ -60,7 +60,7 @@ export async function executeUpdateIdentifiers(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'PATCH',
 			url: `${BASE_URL}/api/user/v1/identity`,

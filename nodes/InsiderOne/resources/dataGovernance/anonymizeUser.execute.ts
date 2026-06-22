@@ -28,7 +28,7 @@ export async function executeAnonymizeUser(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'POST',
 			url: `${BASE_URL}/api/user/v1/anonymize`,

@@ -128,7 +128,7 @@ export async function executeDeleteAttribute(
 
 	return (await this.helpers.httpRequestWithAuthentication.call(
 		this,
-		'insiderOneApi',
+		'insiderOneUnificationApi',
 		{
 			method: 'POST',
 			url: `${BASE_URL}/api/user/v1/attribute/delete`,
