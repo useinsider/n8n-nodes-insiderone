@@ -9,13 +9,13 @@ An [n8n](https://n8n.io/) community node package that integrates with [Insider O
 In your n8n instance, go to **Settings → Community Nodes**, click **Install**, and enter:
 
 ```
-n8n-nodes-insiderone
+@useinsider/n8n-nodes-insiderone
 ```
 
 ### npm (self-hosted)
 
 ```bash
-npm install n8n-nodes-insiderone
+npm install @useinsider/n8n-nodes-insiderone
 ```
 
 ### Docker
