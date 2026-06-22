@@ -4,6 +4,5 @@ dist/
 .tsbuildinfo
 .claude/
 CLAUDE.md
-package-lock.json
 n8n_data/
 .DS_Store
