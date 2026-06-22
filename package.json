@@ -5,7 +5,17 @@
 	"license": "MIT",
 	"homepage": "https://github.com/useinsider/n8n-nodes-insiderone",
 	"keywords": [
-		"n8n-community-node-package"
+		"n8n-community-node-package",
+		"n8n",
+		"insider",
+		"insiderone",
+		"useinsider",
+		"customer-data-platform",
+		"cdp",
+		"marketing-automation",
+		"personalization",
+		"user-data",
+		"gdpr"
 	],
 	"author": {
 		"name": "Insider One"
