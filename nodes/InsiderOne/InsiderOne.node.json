@@ -1,8 +1,8 @@
 {
-	"node": "n8n-nodes-insiderone.insiderOne",
+	"node": "@useinsider/n8n-nodes-insiderone.insiderOne",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": ["Marketing & Growth"],
+	"categories": ["Marketing & Content"],
 	"resources": {
 		"primaryDocumentation": [
 			{

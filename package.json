@@ -1,6 +1,6 @@
 {
 	"name": "@useinsider/n8n-nodes-insiderone",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "n8n community node for Insider One",
 	"license": "MIT",
 	"homepage": "https://github.com/useinsider/n8n-nodes-insiderone",

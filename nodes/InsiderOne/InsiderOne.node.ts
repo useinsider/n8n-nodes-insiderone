@@ -6,8 +6,9 @@ import type {
 	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
 } from 'n8n-workflow';
-import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 import { BASE_URL } from './shared/utils';
 
 import {
@@ -237,7 +238,13 @@ export class InsiderOne implements INodeType {
 						}
 						continue;
 					}
-					throw new NodeOperationError(this.getNode(), error as Error, {
+					// Validation errors are already NodeOperationError; rethrow as-is.
+					// Everything else is an HTTP/API failure — wrap in NodeApiError to
+					// preserve the HTTP status code and API response body in the n8n UI.
+					if (error instanceof NodeOperationError) {
+						throw error;
+					}
+					throw new NodeApiError(this.getNode(), error as JsonObject, {
 						itemIndex: start,
 					});
 				}
@@ -273,7 +280,13 @@ export class InsiderOne implements INodeType {
 					});
 					continue;
 				}
-				throw new NodeOperationError(this.getNode(), error as Error, {
+				// Validation errors are already NodeOperationError; rethrow as-is.
+				// Everything else is an HTTP/API failure — wrap in NodeApiError to
+				// preserve the HTTP status code and API response body in the n8n UI.
+				if (error instanceof NodeOperationError) {
+					throw error;
+				}
+				throw new NodeApiError(this.getNode(), error as JsonObject, {
 					itemIndex: i,
 				});
 			}
